@@ -11,15 +11,15 @@ public class SpawnManager : MonoBehaviour
     public GameObject powerupPrefab;
 
     void Start() {
+        SpawnEnemyWave(waveNumber);
         Instantiate(powerupPrefab, GenerateSpawnPosition(), powerupPrefab.transform.rotation);
-        SpawnEnemyWave(waveNumber); }
+    }
 
     private void Update()
     {
         enemyCount = FindObjectsOfType<Enemy>().Length;
         if (enemyCount == 0) {
             waveNumber++;
-            Instantiate(powerupPrefab, GenerateSpawnPosition(), powerupPrefab.transform.rotation);
             SpawnEnemyWave(waveNumber);
     }
 }
