@@ -67,6 +67,7 @@ public class PlayerController : MonoBehaviour
             ScoreText(count);
             pickupIndicator.gameObject.SetActive(false);
             hasPickup = false;
+            sphere.transform.localScale += Vector3.one;
             if (count >= 5)
             {
                 winText.gameObject.SetActive(true);
