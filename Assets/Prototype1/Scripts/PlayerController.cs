@@ -8,6 +8,7 @@ public class PlayerController : MonoBehaviour
 {
     //UI
     public TMP_Text pickupText;
+    public TMP_Text winText;
     public int count = 0;
 
     //Player
@@ -63,11 +64,14 @@ public class PlayerController : MonoBehaviour
         if (other.CompareTag("Deposit") && hasPickup) {
             sphere.GetComponent<Renderer>().material.color = depositColor;
             count++;
-            UpdateScore(count);
-
-            //pickupText.text = ("Stars Deposited: " + 1);
+            ScoreText(count);
             pickupIndicator.gameObject.SetActive(false);
             hasPickup = false;
+            if (count >= 5)
+            {
+                winText.gameObject.SetActive(true);
+                winText.color = RandomColor();
+            }
         }
 
         if (other.CompareTag("Pickup") && !hasPickup) {
@@ -113,7 +117,7 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    public void UpdateScore(int _score)
+    public void ScoreText(int _score)
     {
         pickupText.text = "Stars Deposited: " + _score + " Out of 5";
     }
