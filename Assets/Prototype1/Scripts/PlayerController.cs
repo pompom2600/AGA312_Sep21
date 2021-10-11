@@ -15,6 +15,9 @@ public class PlayerController : MonoBehaviour
     public float speed = 5f;
     private Vector3 SpawnPoint;
     private GameObject focalPoint;
+    public float fallMultiplier = 2.5f;
+    public float lowJumpMultiplier = 2f;
+
 
     public float tweenTime = 1f;
 
@@ -41,6 +44,7 @@ public class PlayerController : MonoBehaviour
 
     void Update()
     {
+        Jumping();
         float forwardInput = Input.GetAxis("Vertical");
         playerRb.AddForce(focalPoint.transform.forward * speed * forwardInput);
         powerupIndicator.transform.position = transform.position + new Vector3(0, -.5f, 0);
@@ -48,9 +52,10 @@ public class PlayerController : MonoBehaviour
         if (transform.position.y < -10)
         {
             transform.position = SpawnPoint;
-            speed = 0;
         }
     }
+
+
 
     private void OnTriggerEnter(Collider other)
     {
@@ -85,17 +90,7 @@ public class PlayerController : MonoBehaviour
             powerupIndicator.gameObject.SetActive(false);
         }
 
-        void OnCollisionEnter(Collision collision)
-        {
-            if (collision.gameObject.CompareTag("Enemy") && hasPowerup)
-            {
-                Rigidbody enemyRb = collision.gameObject.GetComponent<Rigidbody>();
-                Vector3 awayFromPlayer = (collision.gameObject.transform.position - transform.position);
-
-                Debug.Log("Collided with " + collision.gameObject.name + " with powerup set to " + hasPowerup);
-                enemyRb.AddForce(awayFromPlayer * powerupStrength, ForceMode.Impulse);
-            }
-        }
+        
     }
 
     private void OnTriggerExit(Collider other)
@@ -106,9 +101,21 @@ public class PlayerController : MonoBehaviour
         }
     }
 
+    void OnCollisionEnter(Collision collision)
+    {
+        if (collision.gameObject.CompareTag("Enemy") && hasPowerup)
+        {
+            Rigidbody enemyRb = collision.gameObject.GetComponent<Rigidbody>();
+            Vector3 awayFromPlayer = (collision.gameObject.transform.position - transform.position);
+
+            Debug.Log("Collided with " + collision.gameObject.name + " with powerup set to " + hasPowerup);
+            enemyRb.AddForce(awayFromPlayer * powerupStrength, ForceMode.Impulse);
+        }
+    }
+
     public void UpdateScore(int _score)
     {
-        pickupText.text = "Stars Deposited: " + _score;
+        pickupText.text = "Stars Deposited: " + _score + " Out of 5";
     }
 
     public Color RandomColor()
@@ -116,6 +123,15 @@ public class PlayerController : MonoBehaviour
         return new Color(Random.Range(0f, 1f), Random.Range(0f, 1f), Random.Range(0f, 1f));
     }
 
+    public void Jumping()
+    {
+        if (playerRb.velocity.y < 1)
+            playerRb.velocity += Vector3.up * Physics.gravity.y * (fallMultiplier - 1) * Time.deltaTime;
+
+        else if (playerRb.velocity.y > 1 && !Input.GetButtonDown("Jump"))
+            playerRb.velocity += Vector3.up * Physics.gravity.y * (lowJumpMultiplier - 1) * Time.deltaTime;
+
+    }
 }
 
 
