@@ -33,12 +33,13 @@ public class SpawnManager : MonoBehaviour
 
     void SpawnEnemyWave(int enemiesToSpawn)
     {
-        //for (int i = 5; i < enemiesToSpawn; i++)
-        Instantiate(enemyPrefab, GenerateSpawnPosition(), enemyPrefab.transform.rotation);
+        for (int i = 0; i < enemiesToSpawn; i++)
+            Instantiate(enemyPrefab, GenerateSpawnPosition(), enemyPrefab.transform.rotation);
     }
     void PowerupSpawn(int powerupToSpawn)
     {
-        Instantiate(powerupPrefab, GenerateSpawnPosition(), powerupPrefab.transform.rotation);
+        for (int i = 0; i < powerupToSpawn; i++)
+            Instantiate(powerupPrefab, GenerateSpawnPosition(), powerupPrefab.transform.rotation);
     }
 
 }

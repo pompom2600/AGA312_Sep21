@@ -5,13 +5,15 @@ using UnityEngine;
 public class UIPause : MonoBehaviour
 {
     public GameObject pausePanel;
+    public GameObject startPanel;
     bool paused = false;
+    bool intro = true;
 
     void Start()
     {
         paused = false;
         pausePanel.SetActive(false);
-        Time.timeScale = 1;
+        Time.timeScale = 0;
     }
 
 
@@ -29,5 +31,10 @@ public class UIPause : MonoBehaviour
         pausePanel.SetActive(paused);
     }
 
-
+    public void Intro()
+    {
+        intro = !intro;
+        Time.timeScale = 1;
+        startPanel.SetActive(intro);
+    }
 }

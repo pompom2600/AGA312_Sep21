@@ -21,5 +21,4 @@ public class SceneManagement : JMC
         Application.Quit();
         Debug.Log("Game Quit");
     }
-
 }

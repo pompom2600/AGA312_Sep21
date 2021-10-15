@@ -7,9 +7,13 @@ using UnityEngine.UI;
 public class PlayerController : MonoBehaviour
 {
     //UI
+    public GameObject winPanel;
+    public GameObject losePanel;
     public TMP_Text pickupText;
     public TMP_Text winText;
+    public TMP_Text timerText;
     public int count = 0;
+    public int countDown = 300;
 
     //Player
     private Rigidbody playerRb;
@@ -41,10 +45,12 @@ public class PlayerController : MonoBehaviour
         playerRb = GetComponent<Rigidbody>();
         focalPoint = GameObject.Find("FocalPoint");
         SpawnPoint = transform.position;
+
     }
 
     void Update()
     {
+       //TimerCount();
         Jumping();
         float forwardInput = Input.GetAxis("Vertical");
         playerRb.AddForce(focalPoint.transform.forward * speed * forwardInput);
@@ -70,8 +76,9 @@ public class PlayerController : MonoBehaviour
             sphere.transform.localScale += Vector3.one;
             if (count >= 5)
             {
-                winText.gameObject.SetActive(true);
+                winPanel.SetActive(true);
                 winText.color = RandomColor();
+                Time.timeScale = 0;
             }
         }
 
@@ -135,8 +142,20 @@ public class PlayerController : MonoBehaviour
 
         else if (playerRb.velocity.y > 1 && !Input.GetButtonDown("Jump"))
             playerRb.velocity += Vector3.up * Physics.gravity.y * (lowJumpMultiplier - 1) * Time.deltaTime;
-
     }
+
+    public void TimerCount()
+    {
+        timerText.text = "Timer: " + --countDown * Time.deltaTime;
+        if (countDown <= 0)
+        {
+            losePanel.SetActive(true);
+            Time.timeScale = 0;
+            timerText.text = "Timer: " + 0;
+
+        }
+    }
+
 }
 
 
