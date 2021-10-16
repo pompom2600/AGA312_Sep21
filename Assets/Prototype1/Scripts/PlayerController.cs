@@ -8,16 +8,14 @@ public class PlayerController : MonoBehaviour
 {
     //UI
     public GameObject winPanel;
-    public GameObject losePanel;
     public TMP_Text pickupText;
     public TMP_Text winText;
-    public TMP_Text timerText;
     public int count = 0;
-    public int countDown = 300;
+
 
     //Player
     private Rigidbody playerRb;
-    public float speed = 5f;
+    public float speed = 1f;
     private Vector3 SpawnPoint;
     private GameObject focalPoint;
     public float fallMultiplier = 2.5f;
@@ -28,7 +26,7 @@ public class PlayerController : MonoBehaviour
 
     //Powerup
     public bool hasPowerup;
-    private float powerupStrength = 15f;
+    private float powerupStrength = 4f;
 
     //Indicators
     public GameObject powerupIndicator;
@@ -50,13 +48,12 @@ public class PlayerController : MonoBehaviour
 
     void Update()
     {
-       //TimerCount();
         Jumping();
         float forwardInput = Input.GetAxis("Vertical");
         playerRb.AddForce(focalPoint.transform.forward * speed * forwardInput);
         powerupIndicator.transform.position = transform.position + new Vector3(0, -.5f, 0);
         pickupIndicator.transform.position = transform.position + new Vector3(0, 2.5f, 0);
-        if (transform.position.y < -10)
+        if (transform.position.y < -5)
         {
             transform.position = SpawnPoint;
         }
@@ -92,6 +89,8 @@ public class PlayerController : MonoBehaviour
             hasPowerup = true;
             Destroy(other.gameObject);
             powerupIndicator.gameObject.SetActive(true);
+            playerRb.drag = 0f;
+            playerRb.mass = .5f;
             StartCoroutine(PowerupCountDownRoutine());
         }
 
@@ -99,6 +98,8 @@ public class PlayerController : MonoBehaviour
         {
             yield return new WaitForSeconds(7);
             hasPowerup = false;
+            playerRb.drag = 0.05f;
+            playerRb.mass = 1f;
             powerupIndicator.gameObject.SetActive(false);
         }
 
@@ -142,18 +143,6 @@ public class PlayerController : MonoBehaviour
 
         else if (playerRb.velocity.y > 1 && !Input.GetButtonDown("Jump"))
             playerRb.velocity += Vector3.up * Physics.gravity.y * (lowJumpMultiplier - 1) * Time.deltaTime;
-    }
-
-    public void TimerCount()
-    {
-        timerText.text = "Timer: " + --countDown * Time.deltaTime;
-        if (countDown <= 0)
-        {
-            losePanel.SetActive(true);
-            Time.timeScale = 0;
-            timerText.text = "Timer: " + 0;
-
-        }
     }
 
 }

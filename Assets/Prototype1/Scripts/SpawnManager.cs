@@ -7,6 +7,7 @@ public class SpawnManager : MonoBehaviour
     public GameObject enemyPrefab;
     private float spawnRange = 9f;
     public int enemyCount;
+    private int maxNumber = 5;
     public int waveNumber = 1;
     public GameObject powerupPrefab;
 
@@ -17,9 +18,16 @@ public class SpawnManager : MonoBehaviour
 
     private void Update(){
         enemyCount = FindObjectsOfType<Enemy>().Length;
-        if (enemyCount <= 0)
+         
+        if (enemyCount <= 0 && waveNumber < maxNumber)
         {
             waveNumber++;
+            PowerupSpawn(waveNumber);
+            SpawnEnemyWave(waveNumber);
+        }
+
+        else if (enemyCount <= 0)
+        {
             PowerupSpawn(waveNumber);
             SpawnEnemyWave(waveNumber);
         }
