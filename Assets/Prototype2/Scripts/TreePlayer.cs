@@ -4,13 +4,17 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 
+
 public class TreePlayer : MonoBehaviour
 {
     [Header("UI")]
-    public TMP_Text waterText;
-    public TMP_Text windText;
-    public TMP_Text growText;
+    public GameObject rainInfo;
+    public GameObject windInfo;
+    public GameObject growInfo;
     public Slider healthSlider;
+
+    public GameObject winPanel;
+    public GameObject losePanel;
 
     [Header("SkyBox")]
     public GameObject raining;
@@ -19,47 +23,114 @@ public class TreePlayer : MonoBehaviour
     public GameObject windy;
 
     [Header("Tree Parts")]
-    private Transform treeTrans;
+    private Quaternion origPos;
+    private Vector3 winSize;
+    private Vector3 local;
     private Vector3 upgrow;
     public float health = 50f;
 
     [Header("Bools")]
     public bool isRaining;
     public bool isDay;
-    public bool isNight;
     public bool isWindy;
 
+    [Header("Timers")]
+    public int dayTimer = 10;
+    public float windTimer = 10;
+    public float waterTimer = 10;
+    private int rndNumber;
 
     void Start()
     {
-        
+        winSize = new Vector3(10,31,10);
+        isDay= false;
+        Time.timeScale = 0;
+
+        origPos = transform.rotation;
+        local = transform.localScale;
     }
 
     private void FixedUpdate()
     {
         raining.SetActive(isRaining);
+        rainInfo.SetActive(isRaining);
         day.SetActive(isDay);
-        night.SetActive(isNight);
+        growInfo.SetActive(isDay);
+        night.SetActive(!isDay);
         windy.SetActive(isWindy);
+        windInfo.SetActive(isWindy);
     }
 
     void Update()
     {
         healthSlider.value = health;
         health = Mathf.Clamp(health, 0f, 100f);
-        //transform.rotation = Mathf.Clamp(-75, 0);
 
+        rndNumber = Random.Range(1, 50);
+        //Invoke("WindAbsorbtion", rndNumber);
+        //Invoke("WaterAbsorbtion", rndNumber);
         WaterAbsorbtion();
         SunAbsorbtion();
-        WindAbsorbtion();
+
+
+        float tippingThreshold = 60;
+        float xRotation = transform.rotation.eulerAngles.x;
+        while (xRotation > 180) xRotation -= 360;
+
+        if (Mathf.Abs(xRotation) > tippingThreshold)
+        {
+            LoseGame();
+            Debug.Log("potato");
+        }
+
+        if (health <= 0)
+        {
+            Time.timeScale = 0;
+            LoseGame();
+        }
+
+        if (local == winSize)
+            {
+            WinGame();
+            }
     }
 
+    public IEnumerator weatherPattern()
+    {
+        for(int i=0; i < dayTimer; i++)
+        {
+            isDay = true;
+        }
+
+        yield return null;
+
+        for (int i = 0; i < dayTimer; i++)
+        {
+            isDay = false;
+        }
+
+        yield return null;
+
+        StartCoroutine(weatherPattern());
+    }
+
+    public void LoseGame()
+    {
+        losePanel.SetActive(true);
+        Time.timeScale = 0;
+    }
+
+    public void WinGame()
+    {
+        winPanel.SetActive(true);
+        Time.timeScale = 0;
+    }
 
     public void GrowTree()
     {
         if (health >= 25)
         {
-            health = health - 25;
+            health = health - 24;
             upgrow = new Vector3(0.5f, 2, 0.5f);
             transform.localScale += upgrow;
         }
@@ -68,30 +139,57 @@ public class TreePlayer : MonoBehaviour
 
     void WaterAbsorbtion()
     {
-        if (isRaining && Input.GetKeyDown(KeyCode.LeftAlt))
+        if (isRaining && waterTimer >= 0)
         {
-            health = health + 5;
+            waterTimer = waterTimer - 0.01f;
+
+            if (Input.GetKeyDown(KeyCode.LeftAlt))
+                health = health + 5;
+        }
+
+        if (waterTimer <= 0)
+        {
+            isRaining = false;
+            waterTimer = 10;
+            rndNumber = Random.Range(1, 10);
+            Invoke("WaterAbsorbtion", rndNumber);
         }
     }
     void SunAbsorbtion()
     {
-        if (isDay && Input.GetKeyDown(KeyCode.Mouse0))
+        if (isDay)
         {
-            health++;
+
+            if (Input.GetKeyDown(KeyCode.Mouse0))
+            {
+                health++;
+            }
         }
+
     }
     void WindAbsorbtion()
     {
-        if (isWindy)
+        isWindy = true;
+
+        if (windTimer >= 0)
         {
+           windTimer = windTimer - 0.01f;
            transform.Rotate(-.05f, 0, 0 * Time.deltaTime);
 
             if (Input.GetKey(KeyCode.Space))
-            {
+            { 
                 transform.Rotate(.1f, 0, 0 * Time.deltaTime);
-                health = health--;
+                health = health - .02f;
             }
         }
-    }
 
+        if (windTimer <= 0)
+        {
+            isWindy = false;
+            windTimer = 10;
+            transform.rotation = origPos;
+            rndNumber = Random.Range(1, 10);
+            Invoke("WindAbsorbtion", rndNumber);
+        }
+    }
 }
