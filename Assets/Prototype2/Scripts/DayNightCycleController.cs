@@ -1,47 +1,52 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
+using TMPro;
 
-public interface DayNightInterface
-{
-    void GetComponent();
+public enum TimeOfDay {Day, Night }
 
-    void SetParameter(float _time);
-}
-[ExecuteInEditMode]
 public class DayNightCycleController : MonoBehaviour
 {
-    [Range(0, 1)]
-    public float time;
-    public DayNightInterface[] setters;
-    public bool day;
+    public TimeOfDay timeOfDay;
+    public float timer;
+    public float timeScale;
+    public TMP_Text clock;
+    public GameObject sunLight;
 
-
-    private void OnEnable()
+    private void Start()
     {
-        time = 0;
-        day = true;
-        GetSetters();
-    }
-
-    private void GetSetters()
-    {
-        setters = GetComponentInChildren<DayNightInterface[]>();
-        foreach (var setter in setters)
-        {
-            setter.GetComponent();
-        }
+        timer = 12;
     }
 
     private void Update()
     {
-        if (setters.Length > 0)
+        timer += Time.deltaTime * timeScale;
+        clock.text = ("Time: " + timer);
+        if (timer >= 24f)
         {
-            foreach (var setter in setters)
-            {
-                setter.SetParameter(time);
-            }
+            timer = 0;
         }
+    
+        if( timer > 7 && timer < 19)
+        {
+            timeOfDay = TimeOfDay.Day;
+        }
+
+        else
+        {
+            timeOfDay = TimeOfDay.Night;
+        }
+
+
+        Quaternion temp = sunLight.transform.rotation;
+        temp.eulerAngles = new Vector3(timer * 15, 0, 0);
+        sunLight.transform.rotation = temp;
+
+
     }
+
+
+
 
 }

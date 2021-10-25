@@ -18,8 +18,6 @@ public class TreePlayer : MonoBehaviour
 
     [Header("SkyBox")]
     public GameObject raining;
-    public GameObject day;
-    public GameObject night;
     public GameObject windy;
 
     [Header("Tree Parts")]
@@ -31,32 +29,32 @@ public class TreePlayer : MonoBehaviour
 
     [Header("Bools")]
     public bool isRaining;
-    public bool isDay;
     public bool isWindy;
 
     [Header("Timers")]
-    public int dayTimer = 10;
     public float windTimer = 10;
     public float waterTimer = 10;
     private int rndNumber;
 
+    DayNightCycleController DayNight;
+
+
     void Start()
     {
         winSize = new Vector3(10,31,10);
-        isDay= false;
         Time.timeScale = 0;
 
         origPos = transform.rotation;
         local = transform.localScale;
+        DayNight = FindObjectOfType<DayNightCycleController>();
+        InvokeRepeating("Wind", 1, 1);
     }
 
     private void FixedUpdate()
     {
         raining.SetActive(isRaining);
         rainInfo.SetActive(isRaining);
-        day.SetActive(isDay);
-        growInfo.SetActive(isDay);
-        night.SetActive(!isDay);
+        growInfo.SetActive(IsDay());
         windy.SetActive(isWindy);
         windInfo.SetActive(isWindy);
     }
@@ -66,11 +64,10 @@ public class TreePlayer : MonoBehaviour
         healthSlider.value = health;
         health = Mathf.Clamp(health, 0f, 100f);
 
-        rndNumber = Random.Range(1, 50);
-        //Invoke("WindAbsorbtion", rndNumber);
-        //Invoke("WaterAbsorbtion", rndNumber);
-        WaterAbsorbtion();
-        SunAbsorbtion();
+        if (isWindy)
+        {
+            WindAbsorbtion();
+        }
 
 
         float tippingThreshold = 60;
@@ -93,25 +90,6 @@ public class TreePlayer : MonoBehaviour
             {
             WinGame();
             }
-    }
-
-    public IEnumerator weatherPattern()
-    {
-        for(int i=0; i < dayTimer; i++)
-        {
-            isDay = true;
-        }
-
-        yield return null;
-
-        for (int i = 0; i < dayTimer; i++)
-        {
-            isDay = false;
-        }
-
-        yield return null;
-
-        StartCoroutine(weatherPattern());
     }
 
     public void LoseGame()
@@ -157,7 +135,7 @@ public class TreePlayer : MonoBehaviour
     }
     void SunAbsorbtion()
     {
-        if (isDay)
+        if (IsDay())
         {
 
             if (Input.GetKeyDown(KeyCode.Mouse0))
@@ -169,8 +147,6 @@ public class TreePlayer : MonoBehaviour
     }
     void WindAbsorbtion()
     {
-        isWindy = true;
-
         if (windTimer >= 0)
         {
            windTimer = windTimer - 0.01f;
@@ -188,8 +164,24 @@ public class TreePlayer : MonoBehaviour
             isWindy = false;
             windTimer = 10;
             transform.rotation = origPos;
-            rndNumber = Random.Range(1, 10);
-            Invoke("WindAbsorbtion", rndNumber);
         }
     }
+
+    void Wind()
+    {
+        if (isWindy)
+            return;
+
+        int rnd = Random.Range(0, 10);
+        if (rnd == 5) 
+        {
+            isWindy = true;
+        }
+    }
+
+    bool IsDay()
+    {
+        return DayNight.timeOfDay == TimeOfDay.Day;
+    }
+
 }
