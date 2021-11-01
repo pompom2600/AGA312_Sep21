@@ -32,9 +32,8 @@ public class TreePlayer : MonoBehaviour
     public bool isWindy;
 
     [Header("Timers")]
-    public float windTimer = 10;
+    public float windTimer = 20;
     public float waterTimer = 10;
-    private int rndNumber;
 
     DayNightCycleController DayNight;
 
@@ -48,6 +47,7 @@ public class TreePlayer : MonoBehaviour
         local = transform.localScale;
         DayNight = FindObjectOfType<DayNightCycleController>();
         InvokeRepeating("Wind", 1, 1);
+        InvokeRepeating("Rain", 1, 1);
     }
 
     private void FixedUpdate()
@@ -69,6 +69,14 @@ public class TreePlayer : MonoBehaviour
             WindAbsorbtion();
         }
 
+        if (isRaining)
+        {
+            WaterAbsorbtion();
+        }
+        if (IsDay())
+        {
+            SunAbsorbtion();
+        }
 
         float tippingThreshold = 60;
         float xRotation = transform.rotation.eulerAngles.x;
@@ -117,7 +125,7 @@ public class TreePlayer : MonoBehaviour
 
     void WaterAbsorbtion()
     {
-        if (isRaining && waterTimer >= 0)
+        if (waterTimer >= 0)
         {
             waterTimer = waterTimer - 0.01f;
 
@@ -129,8 +137,6 @@ public class TreePlayer : MonoBehaviour
         {
             isRaining = false;
             waterTimer = 10;
-            rndNumber = Random.Range(1, 10);
-            Invoke("WaterAbsorbtion", rndNumber);
         }
     }
     void SunAbsorbtion()
@@ -162,8 +168,20 @@ public class TreePlayer : MonoBehaviour
         if (windTimer <= 0)
         {
             isWindy = false;
-            windTimer = 10;
+            windTimer = 20;
             transform.rotation = origPos;
+        }
+    }
+
+    void Rain()
+    {
+        if (isRaining)
+            return;
+
+        int rnd = Random.Range(0, 10);
+        if (rnd == 5)
+        {
+            isRaining = true;
         }
     }
 
