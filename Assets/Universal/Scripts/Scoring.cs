@@ -28,6 +28,8 @@ public class Scoring : JMC
     public TMP_Text currentTimeWinText;
     public TMP_Text winMessageText;
 
+    public List<float> topTimes;
+    public List<TMP_Text> topTimesText;
     public List<GameObject> collectables;
 
 
@@ -48,6 +50,7 @@ public class Scoring : JMC
             bestTime = 1000000;
         }
 
+        LoadTopTimes();
     }
 
     private void Update()
@@ -99,9 +102,53 @@ public class Scoring : JMC
             winMessageText.text = "Bad Luck \n Try Again Buddy";
         }
         bestTimeWinText.text = "Best Time: " + bestTime.ToString("F2");
+        SetTopTimes();
         PlayerPrefs.Save();
         winPanel.SetActive(true);
     }
+
+    void LoadTopTimes()
+    {
+        for (int i = 0; i < topTimesText.Count; i++)
+        {
+            if (PlayerPrefs.GetFloat("TopTime" + i.ToString())!= 0)
+            {
+                topTimes.Add(PlayerPrefs.GetFloat("TopTime" + i.ToString()));
+            }
+            else
+            {
+                topTimes.Add(99999);
+            }
+        }
+        DisplayTopTimes();
+    }
+
+    void SetTopTimes()
+    {
+        topTimes.Add(currentTime);
+        topTimes.Sort();
+        topTimes.RemoveAt(topTimes.Count-1); //Last one is removed
+        for (int i = 0; i < topTimesText.Count; i++)
+            PlayerPrefs.SetFloat("TopTime" + i.ToString(), topTimes[i]);
+        
+        DisplayTopTimes();
+    }
+
+
+    void DisplayTopTimes()
+    {
+        for (int i = 0; i < topTimesText.Count; i++)
+        {
+            if (topTimes[i] != 99999)
+            {
+                topTimesText[i].text = (i + 1).ToString() + ": " + topTimes[i].ToString("F3");
+            }
+            else
+                topTimesText[i].text = "No Time Set";
+        }
+
+    }
+
 
     void CheckScore()
     {
