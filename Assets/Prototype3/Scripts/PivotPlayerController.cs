@@ -12,6 +12,7 @@ public class PivotPlayerController : MonoBehaviour
 
 
     [Header("Player")]
+
     private Rigidbody playerRb;
     private Transform playerTrans;
     private Quaternion playerQuater;
@@ -36,9 +37,12 @@ public class PivotPlayerController : MonoBehaviour
     {
         float forwardInput = Input.GetAxis("Vertical");
         float sideInput = Input.GetAxis("Horizontal");
-        playerTrans.rotation = new Quaternion(sideInput, forwardInput, forwardInput + sideInput, 0 );
+
+
+
+        //playerTrans.rotation = new Quaternion(sideInput, forwardInput, forwardInput + sideInput, 0 );
         //playerQuater
-       // playerRb.AddForce(focalPoint.transform.forward * forwardInput);
+        // playerRb.AddForce(focalPoint.transform.forward * forwardInput);
         if (ball.transform.position.y < -5)
         {
             LosePanel.SetActive(true);
