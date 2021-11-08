@@ -34,7 +34,7 @@ public class TreePlayer : MonoBehaviour
     [Header("Timers")]
     public float windTimer = 20;
     public float waterTimer = 10;
-
+    
     DayNightCycleController DayNight;
 
 
