@@ -24,7 +24,7 @@ public class TiltControl : MonoBehaviour
     {
         float moveVertical = Input.GetAxis("Vertical");
         float moveHorizontal = Input.GetAxis("Horizontal");
-        //transform.eulerAngles.y = Mathf.Clamp(transform.eulerAngles.y, -90, -90);
+        //Mathf.Clamp(transform.eulerAngles.y, 25, -25);
         Vector3 moveVector = new Vector3(moveVertical * speed, 0, -moveHorizontal * speed);
         Quaternion deltaRotation = Quaternion.Euler(moveVector * Time.fixedDeltaTime);
         rB.MoveRotation(rB.rotation * deltaRotation);
