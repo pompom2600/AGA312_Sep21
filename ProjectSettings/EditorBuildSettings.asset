@@ -20,4 +20,7 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Prototype3/Scenes/PivotPoint.unity
     guid: 5eb909140a375e04c9fce2e67bcaffcd
+  - enabled: 1
+    path: Assets/Prototype4/Scenes/Mathtastic.unity
+    guid: 1d476c7ba7c0da34d85dde68804b6553
   m_configObjects: {}

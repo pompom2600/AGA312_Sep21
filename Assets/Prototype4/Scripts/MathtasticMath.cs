@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
+using UnityEngine.UI;
 using DG.Tweening;
 
 public class MathtasticMath : MonoBehaviour
@@ -14,11 +15,16 @@ public class MathtasticMath : MonoBehaviour
     public TMP_InputField inputField2;
     public GameObject winPanel;
     public GameObject losePanel;
+    public GameObject gamePanel;
+
+    public bool gameBool;
+
 
     [Header("Player")]
     public GameObject player;
-    public TMP_Text livesText;
-    public int lives = 3;
+    public Transform originalPos;
+    public TMP_Text movesText;
+    public int moves = 50;
 
 
     //[Header("Enums")]
@@ -39,14 +45,20 @@ public class MathtasticMath : MonoBehaviour
     {
         losePanel.SetActive(false);
         winPanel.SetActive(false);
+        originalPos = player.GetComponent<Transform>();
+        GenerateOperators();
+
     }
 
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Return))
+        movesText.text = "Moves Left: " + moves;
+        if (moves <= 0)
         {
-            MovePlayer();
+            losePanel.SetActive(true);
+            gamePanel.SetActive(false);
         }
+
     }
 
     void GenerateNumbers()
@@ -76,7 +88,6 @@ public class MathtasticMath : MonoBehaviour
         operatorText.text = "x";
         correctAnswer = numberOne * numberTwo;
         Debug.Log(numberOne + " x " + numberTwo + " = " + correctAnswer);
-        GenerateDummyAnswers();
     }
 
     void GenerateAddition()
@@ -85,7 +96,6 @@ public class MathtasticMath : MonoBehaviour
         operatorText.text = "+";
         correctAnswer = numberOne + numberTwo;
         Debug.Log(numberOne + " + " + numberTwo + " = " + correctAnswer);
-        GenerateDummyAnswers();
     }
 
     void GenerateSubtraction()
@@ -94,7 +104,6 @@ public class MathtasticMath : MonoBehaviour
         operatorText.text = "-";
         correctAnswer = numberOne - numberTwo;
         Debug.Log(numberOne + " - " + numberTwo + " = " + correctAnswer);
-        GenerateDummyAnswers();
     }
 
     void GenerateDivision()
@@ -104,12 +113,9 @@ public class MathtasticMath : MonoBehaviour
         correctAnswer = numberOne / numberTwo;
         correctAnswer = Mathf.RoundToInt(correctAnswer);
         Debug.Log(numberOne + " / " + numberTwo + " = " + correctAnswer);
-        GenerateDummyAnswers();
     }
 
-    /// <summary>
     /// Gets a random number based on our difficulty
-    /// </summary>
     /// <returns>A random number</returns>
     int GetRandomNumbers()
     {
@@ -126,23 +132,6 @@ public class MathtasticMath : MonoBehaviour
         }
     }
 
-    /// <summary>
-    /// This will generate a set of dummy answers
-    /// </summary>
-    private void GenerateDummyAnswers()
-    {
-        for (int i = 0; i < dummyAnswers.Count; i++)
-        {
-            int dummy;
-            do
-            {
-                dummy = Random.Range(correctAnswer - 10, correctAnswer + 10);
-            }
-            while (dummy == correctAnswer || dummyAnswers.Contains(dummy));
-            dummyAnswers[i] = dummy;
-            Debug.Log("Dummy answer: " + dummyAnswers[i]);
-        }
-    }
     public void NumberOneInput(string _input)
     {
         numberOne = int.Parse(_input);
@@ -153,7 +142,7 @@ public class MathtasticMath : MonoBehaviour
         numberTwo = int.Parse(_input);
     }
 
-    public void MovePlayer()
+    public void UpMove()
     {
         int answer = 0;
         if (operators == Operators.Plus)
@@ -167,23 +156,105 @@ public class MathtasticMath : MonoBehaviour
 
 
         answerText.text = answer.ToString();
-        //player.transform.DOMoveX(10, .5f);
+
+        if (answer <= 0)
+        {
+            answer = 0;
+        }
         GenerateOperators();
-        transform.Translate(new Vector3(answer, 0, 0));
+        transform.Translate(new Vector3(0, 5, answer));
+
+        moves--;
+
+        //clear inputfield text 
+        //inputField1.text
     }
 
-    private void OnTriggerTrigger(Collider collision)
+    public void DownMove()
     {
-        if (collision.CompareTag("Zone"))
-        {
-            lives--;
-            //resart position
+        int answer = 0;
+        if (operators == Operators.Plus)
+            answer = numberOne + numberTwo;
+        if (operators == Operators.Minus)
+            answer = numberOne - numberTwo;
+        if (operators == Operators.Divide)
+            answer = numberOne / numberTwo;
+        if (operators == Operators.Times)
+            answer = numberOne * numberTwo;
 
-            if(lives <= 0)
-                losePanel.SetActive(true);
+        if (answer <= 0)
+        {
+            answer = 0;
+        }
+        answerText.text = answer.ToString();
+
+        GenerateOperators();
+        transform.Translate(new Vector3(0, 5, -answer));
+
+        moves--;
+    }
+
+    public void LeftMove()
+    {
+        int answer = 0;
+        if (operators == Operators.Plus)
+            answer = numberOne + numberTwo;
+        if (operators == Operators.Minus)
+            answer = numberOne - numberTwo;
+        if (operators == Operators.Divide)
+            answer = numberOne / numberTwo;
+        if (operators == Operators.Times)
+            answer = numberOne * numberTwo;
+
+        if (answer <= 0)
+        {
+            answer = 0;
+        }
+        answerText.text = answer.ToString();
+
+        GenerateOperators();
+        transform.Translate(new Vector3(-answer, 5, 0));
+
+        moves--;
+    }
+
+    public void RightMove()
+    {
+        int answer = 0;
+        if (operators == Operators.Plus)
+            answer = numberOne + numberTwo;
+        if (operators == Operators.Minus)
+            answer = numberOne - numberTwo;
+        if (operators == Operators.Divide)
+            answer = numberOne / numberTwo;
+        if (operators == Operators.Times)
+            answer = numberOne * numberTwo;
+
+        if (answer <= 0)
+            answer = 0;
+
+        answerText.text = answer.ToString();
+
+        GenerateOperators();
+
+        transform.Translate(new Vector3(answer, 5, 0));
+
+        moves--;
+    }
+
+    private void OnCollisionEnter(Collision collision)
+    {
+        if (collision.gameObject.CompareTag("Zone"))
+        {
+            Debug.Log("potato");
+            transform.position = originalPos.position;
         }
 
-        if (collision.CompareTag("Exit"))
+        if (collision.gameObject.CompareTag("Exit"))
+        {
             winPanel.SetActive(true);
+            gamePanel.SetActive(false);
+        }
     }
 }
+

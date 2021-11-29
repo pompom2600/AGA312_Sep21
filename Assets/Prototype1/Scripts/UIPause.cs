@@ -6,9 +6,10 @@ public class UIPause : MonoBehaviour
 {
     public GameObject pausePanel;
     public GameObject startPanel;
+
     bool paused = false;
     bool intro = true;
-
+  
     void Start()
     {
         paused = false;

@@ -9,6 +9,7 @@ TagManager:
   - Zone
   - Pickup
   - Deposit
+  - Exit
   layers:
   - Default
   - TransparentFX
