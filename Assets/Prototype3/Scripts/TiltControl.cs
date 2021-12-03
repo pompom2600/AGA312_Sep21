@@ -12,6 +12,7 @@ public class TiltControl : MonoBehaviour
 
     [Header("Egg")]
     public GameObject eggPrefab;
+    public GameObject egg;
     private float spawnRange = 2f;
 
     [Header("Other")]
@@ -24,7 +25,7 @@ public class TiltControl : MonoBehaviour
         SpawnEgg();
     }
 
-    void FixedUpdate()
+    void Update()
     {
         float moveVertical = Input.GetAxis("Vertical");
         float moveHorizontal = Input.GetAxis("Horizontal");
@@ -44,7 +45,7 @@ public class TiltControl : MonoBehaviour
 
     public void SpawnEgg()
     {
-            Instantiate(eggPrefab, GenerateSpawnPosition(), eggPrefab.transform.rotation);
+            egg = Instantiate(eggPrefab, GenerateSpawnPosition(), eggPrefab.transform.rotation);
     }
 
 }

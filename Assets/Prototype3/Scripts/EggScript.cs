@@ -12,14 +12,14 @@ public class EggScript : MonoBehaviour
     }
 
 
-    void Update()
+   /* void Update()
     {
         if (transform.position.y < -10)
         {
-            Debug.Log(transform.position.y);
+            //Debug.Log(transform.position.y);
             tiltControl.SpawnEgg();
             Destroy(gameObject);
         }
 
-    }
+    }*/
 }

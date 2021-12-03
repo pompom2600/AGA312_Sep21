@@ -22,7 +22,7 @@ public class DayNightCycleController : MonoBehaviour
     private void Update()
     {
         timer += Time.deltaTime * timeScale;
-        clock.text = ("Time: " + timer);
+        clock.text = ("24H CLOCK: " + timer.ToString("F0"));
         if (timer >= 24f)
         {
             timer = 0;

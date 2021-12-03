@@ -1672,7 +1672,7 @@ Rigidbody:
   m_IsKinematic: 0
   m_Interpolate: 0
   m_Constraints: 0
-  m_CollisionDetection: 0
+  m_CollisionDetection: 2
 --- !u!114 &485955275
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1687,6 +1687,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   speed: 100
   eggPrefab: {fileID: 4362165187035957479, guid: 6a827556523aa364db0bb9881363a0d9, type: 3}
+  egg: {fileID: 0}
   tweenTime: 1
 --- !u!114 &485955276
 MonoBehaviour:
@@ -1729,6 +1730,7 @@ MonoBehaviour:
   - {fileID: 1405478465}
   - {fileID: 154286572}
   platform: {fileID: 485955269}
+  tiltControl: {fileID: 485955275}
 --- !u!1 &512662932
 GameObject:
   m_ObjectHideFlags: 0
@@ -1799,10 +1801,10 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: 'Eggs are falling onto you and are causing trouble!
+  m_Text: 'This egg is your baby (Don''t ask how or why)
 
-    Stay balanced
-    for as long as possible'
+    Keep it balanced on
+    you for as long as possible'
 --- !u!222 &512662935
 CanvasRenderer:
   m_ObjectHideFlags: 0

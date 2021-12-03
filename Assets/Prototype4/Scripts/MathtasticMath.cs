@@ -16,13 +16,14 @@ public class MathtasticMath : MonoBehaviour
     public GameObject winPanel;
     public GameObject losePanel;
     public GameObject gamePanel;
+    private Input minLength;
 
     public bool gameBool;
 
 
     [Header("Player")]
     public GameObject player;
-    public Transform originalPos;
+    public Vector3 originalPos;
     public TMP_Text movesText;
     public int moves = 50;
 
@@ -45,9 +46,8 @@ public class MathtasticMath : MonoBehaviour
     {
         losePanel.SetActive(false);
         winPanel.SetActive(false);
-        originalPos = player.GetComponent<Transform>();
+        originalPos = transform.position;
         GenerateOperators();
-
     }
 
     void Update()
@@ -82,7 +82,7 @@ public class MathtasticMath : MonoBehaviour
             operatorText.text = "x";
     }
 
-    void GenerateMultiplication()
+    /* void GenerateMultiplication()
     {
         GenerateNumbers();
         operatorText.text = "x";
@@ -113,7 +113,7 @@ public class MathtasticMath : MonoBehaviour
         correctAnswer = numberOne / numberTwo;
         correctAnswer = Mathf.RoundToInt(correctAnswer);
         Debug.Log(numberOne + " / " + numberTwo + " = " + correctAnswer);
-    }
+    } */
 
     /// Gets a random number based on our difficulty
     /// <returns>A random number</returns>
@@ -162,12 +162,20 @@ public class MathtasticMath : MonoBehaviour
             answer = 0;
         }
         GenerateOperators();
-        transform.Translate(new Vector3(0, 5, answer));
+
+        if (!RaycastingHit(Vector3.forward, answer))
+        {
+            transform.Translate(new Vector3(0, 5, answer));
+        }
+        else
+        {
+            transform.position = originalPos;
+        }
 
         moves--;
 
-        //clear inputfield text 
-        //inputField1.text
+        inputField1.text = "0";
+        inputField2.text = "0";
     }
 
     public void DownMove()
@@ -189,9 +197,19 @@ public class MathtasticMath : MonoBehaviour
         answerText.text = answer.ToString();
 
         GenerateOperators();
-        transform.Translate(new Vector3(0, 5, -answer));
+
+        if (!RaycastingHit(Vector3.back, answer))
+        {
+            transform.Translate(new Vector3(0, 5, -answer));
+        }
+        else
+        {
+            transform.position = originalPos;
+        }
 
         moves--;
+        inputField1.text = "0";
+        inputField2.text = "0";
     }
 
     public void LeftMove()
@@ -213,9 +231,19 @@ public class MathtasticMath : MonoBehaviour
         answerText.text = answer.ToString();
 
         GenerateOperators();
-        transform.Translate(new Vector3(-answer, 5, 0));
 
+        if (!RaycastingHit(Vector3.left, answer))
+        {
+            transform.Translate(new Vector3(-answer, 5, 0));
+        }
+        else
+        {
+            transform.position = originalPos;
+        }
+        
         moves--;
+        inputField1.text = "0";
+        inputField2.text = "0";
     }
 
     public void RightMove()
@@ -237,9 +265,19 @@ public class MathtasticMath : MonoBehaviour
 
         GenerateOperators();
 
-        transform.Translate(new Vector3(answer, 5, 0));
+        if (!RaycastingHit(Vector3.right, answer))
+        {
+            transform.Translate(new Vector3(answer, 5, 0));
+        } 
+        else
+        {
+            transform.position = originalPos;
+        }
 
         moves--;
+        inputField1.text = "0";
+        inputField2.text = "0";
+
     }
 
     private void OnCollisionEnter(Collision collision)
@@ -247,7 +285,7 @@ public class MathtasticMath : MonoBehaviour
         if (collision.gameObject.CompareTag("Zone"))
         {
             Debug.Log("potato");
-            transform.position = originalPos.position;
+            transform.position = originalPos;
         }
 
         if (collision.gameObject.CompareTag("Exit"))
@@ -256,5 +294,12 @@ public class MathtasticMath : MonoBehaviour
             gamePanel.SetActive(false);
         }
     }
+
+
+    private bool RaycastingHit(Vector3 direction, float maxDistance)
+    {
+        return Physics.Raycast(transform.position, direction, maxDistance);
+    }
+
 }
 

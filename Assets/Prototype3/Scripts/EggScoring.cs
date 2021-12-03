@@ -34,6 +34,7 @@ public class EggScoring : JMC
 
     [Header("Other")]
     public GameObject platform;
+    [SerializeField] TiltControl tiltControl;
 
 
     float timer = 0;
@@ -41,6 +42,7 @@ public class EggScoring : JMC
 
     private void Start()
     {
+
         platform.GetComponent<Transform>();
         winPanel.SetActive(false);
         topTimesPanel.SetActive(false);
@@ -70,7 +72,7 @@ public class EggScoring : JMC
             DeletePrefs();
         }
 
-        if (platform.transform.position.y < -5)
+        if (tiltControl.egg.transform.position.y < -10)
         {
             GameOver();
         }
@@ -122,10 +124,15 @@ public class EggScoring : JMC
     {
         topTimes.Add(currentTime);
         topTimes.Sort();
-        topTimes.RemoveAt(topTimes.Count-1); //Last one is removed
+        if (topTimes.Count >= 10)
+        {
+            topTimes.RemoveAt(topTimes.Count - 1); //Last one is removed
+        }
+
         for (int i = 0; i < topTimesText.Count; i++)
-            PlayerPrefs.SetFloat("TopTime" + i.ToString(), topTimes[i]);
+        PlayerPrefs.SetFloat("TopTime" + i.ToString(), topTimes[i]);
         
+        Debug.Log("Setting Top Times");
         DisplayTopTimes();
     }
 
@@ -141,11 +148,12 @@ public class EggScoring : JMC
             else
                 topTimesText[i].text = "No Time Set";
         }
-
+        Debug.Log("Display Top Times");
     }
 
 
     void CheckScore()
     {
-        Debug.Log("Score difference is" + PercentageChange(lastRoundScore, thisRoundScore).ToString("F2") + "%");}
+        Debug.Log("Score difference is" + PercentageChange(lastRoundScore, thisRoundScore).ToString("F2") + "%");
+    }
 }

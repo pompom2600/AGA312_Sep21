@@ -19,6 +19,8 @@ public class TreePlayer : MonoBehaviour
     [Header("SkyBox")]
     public GameObject raining;
     public GameObject windy;
+    public GameObject rainParticals;
+    public GameObject windParticals;
 
     [Header("Tree Parts")]
     private Quaternion origPos;
@@ -32,19 +34,18 @@ public class TreePlayer : MonoBehaviour
     public bool isWindy;
 
     [Header("Timers")]
-    public float windTimer = 20;
-    public float waterTimer = 10;
+    public float windTimer = 30;
+    public float waterTimer = 20;
     
     DayNightCycleController DayNight;
 
 
     void Start()
     {
-        winSize = new Vector3(10,31,10);
+        winSize = new Vector3(7,19,7);
         Time.timeScale = 0;
 
         origPos = transform.rotation;
-        local = transform.localScale;
         DayNight = FindObjectOfType<DayNightCycleController>();
         InvokeRepeating("Wind", 1, 1);
         InvokeRepeating("Rain", 1, 1);
@@ -54,15 +55,19 @@ public class TreePlayer : MonoBehaviour
     {
         raining.SetActive(isRaining);
         rainInfo.SetActive(isRaining);
+        rainParticals.SetActive(isRaining); 
         growInfo.SetActive(IsDay());
         windy.SetActive(isWindy);
         windInfo.SetActive(isWindy);
+        windParticals.SetActive(isWindy);
+
     }
 
     void Update()
     {
         healthSlider.value = health;
         health = Mathf.Clamp(health, 0f, 100f);
+        local = transform.localScale;
 
         if (isWindy)
         {
@@ -85,7 +90,6 @@ public class TreePlayer : MonoBehaviour
         if (Mathf.Abs(xRotation) > tippingThreshold)
         {
             LoseGame();
-            Debug.Log("potato");
         }
 
         if (health <= 0)
@@ -116,7 +120,7 @@ public class TreePlayer : MonoBehaviour
     {
         if (health >= 25)
         {
-            health = health - 24;
+            health -= 24;
             upgrow = new Vector3(0.5f, 2, 0.5f);
             transform.localScale += upgrow;
         }
@@ -130,13 +134,13 @@ public class TreePlayer : MonoBehaviour
             waterTimer = waterTimer - 0.01f;
 
             if (Input.GetKeyDown(KeyCode.LeftAlt))
-                health = health + 5;
+                health += 5;
         }
 
         if (waterTimer <= 0)
         {
             isRaining = false;
-            waterTimer = 10;
+            waterTimer = 20;
         }
     }
     void SunAbsorbtion()
@@ -156,11 +160,11 @@ public class TreePlayer : MonoBehaviour
         if (windTimer >= 0)
         {
            windTimer = windTimer - 0.01f;
-           transform.Rotate(-.05f, 0, 0 * Time.deltaTime);
+           transform.Rotate(-.025f, 0, 0 * Time.deltaTime);
 
             if (Input.GetKey(KeyCode.Space))
             { 
-                transform.Rotate(.1f, 0, 0 * Time.deltaTime);
+                transform.Rotate(.05f, 0, 0 * Time.deltaTime);
                 health = health - .02f;
             }
         }
@@ -168,7 +172,7 @@ public class TreePlayer : MonoBehaviour
         if (windTimer <= 0)
         {
             isWindy = false;
-            windTimer = 20;
+            windTimer = 30;
             transform.rotation = origPos;
         }
     }
