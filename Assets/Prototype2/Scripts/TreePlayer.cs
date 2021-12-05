@@ -160,12 +160,12 @@ public class TreePlayer : MonoBehaviour
         if (windTimer >= 0)
         {
            windTimer = windTimer - 0.01f;
-           transform.Rotate(-.025f, 0, 0 * Time.deltaTime);
+           transform.Rotate(-.05f, 0, 0 * Time.deltaTime);
 
             if (Input.GetKey(KeyCode.Space))
             { 
-                transform.Rotate(.05f, 0, 0 * Time.deltaTime);
-                health = health - .02f;
+                transform.Rotate(.1f, 0, 0 * Time.deltaTime);
+                health = health - .05f;
             }
         }
 
