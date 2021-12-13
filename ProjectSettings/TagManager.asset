@@ -10,6 +10,7 @@ TagManager:
   - Pickup
   - Deposit
   - Exit
+  - Plate
   layers:
   - Default
   - TransparentFX

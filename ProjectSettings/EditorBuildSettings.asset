@@ -23,4 +23,10 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Prototype4/Scenes/Mathtastic.unity
     guid: 1d476c7ba7c0da34d85dde68804b6553
+  - enabled: 1
+    path: Assets/Prototype5/Scenes/Proto_5_Lvl_1.unity
+    guid: 20107a9468d03e743a756fa62fedb479
+  - enabled: 1
+    path: Assets/Prototype5/Scenes/Proto_5_Lvl_2.unity
+    guid: 17565cac7f81dfe40a645f9654bd8cd0
   m_configObjects: {}
