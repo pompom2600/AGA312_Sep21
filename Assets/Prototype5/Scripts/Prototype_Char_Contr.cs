@@ -10,7 +10,7 @@ public class Prototype_Char_Contr : MonoBehaviour
     public GameObject winPanel;
     public GameObject TimerPanel;
     public TMP_Text timerText;
-    public int timer = 30;
+    public float timer = 30;
     int count = 0;
 
 
@@ -19,7 +19,7 @@ public class Prototype_Char_Contr : MonoBehaviour
     private Vector3 spawnPoint;
 
     [Header("Indicators")]
-    public GameObject pickupIndicator;
+    //public GameObject pickupIndicator;
     public GameObject center;
 
     [Header("Other")]
@@ -37,28 +37,30 @@ public class Prototype_Char_Contr : MonoBehaviour
     void Start()
     {
         spawnPoint = transform.position;
-        timerText.text = " " + timer;
+
     }
 
     void Update()
     {
-        pickupIndicator.transform.position = transform.position + new Vector3(0, 1f, 0);
-
+        //pickupIndicator.transform.position = transform.position + new Vector3(0, 1f, 0);
         if (timerBool == true)
-        {
-            print("bool on");
-            timer--;
+            {
+                print("bool on");
+                timer = timer - Time.deltaTime;
+                timerText.text = " " + timer.ToString("F0");
         }
+        if (timer <= 0)
+            {
+                TimerPanel.SetActive(false);
+                timerBool = false;
+            }
     }
 
 
     private void FixedUpdate()
     {
-        if (timer <= 0)
-        {
-            TimerPanel.SetActive(false);
-            timerBool = false;
-        }
+
+        
     }
 
     private void OnTriggerEnter(Collider other)
@@ -69,10 +71,11 @@ public class Prototype_Char_Contr : MonoBehaviour
         {
             count++;
             Destroy(other.gameObject);
-            pickupIndicator.SetActive(true);
+
 
             if (count == pickup.Length)
             {
+                //pickupIndicator.SetActive(true);
                 center.GetComponent<Renderer>().material.color = Color.green;
                 nextLevel = true;
                 Destroy(lockedDoor);
