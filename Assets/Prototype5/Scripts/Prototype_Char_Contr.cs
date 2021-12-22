@@ -116,7 +116,10 @@ public class Prototype_Char_Contr : MonoBehaviour
             Destroy(collision.collider.gameObject, 1f);
         }
 
-
+        if (collision.collider.CompareTag("Exit"))
+        {
+            winPanel.SetActive(true);
+        }
         if (collision.collider.CompareTag("Plate"))
         {
             pressurePlate.GetComponent<Renderer>().material.color = Color.black;

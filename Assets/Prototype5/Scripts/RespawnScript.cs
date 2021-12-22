@@ -20,17 +20,14 @@ public class RespawnScript : MonoBehaviour
     private void OnCollisionEnter(Collision collision)
     {
 
-        if (collision.collider.CompareTag("Enemy"))
-        {
-            Destroy(collision.collider.gameObject, 1f);
-        }
-
         if (collision.collider.CompareTag("Zone"))
         {
             transform.position = spawnPoint.transform.position;
         }
-
-        if (collision.collider.CompareTag("Exit"))
+    }
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.CompareTag("Exit"))
         {
             winPanel.SetActive(true);
         }

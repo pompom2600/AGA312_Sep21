@@ -41,4 +41,16 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Prototype5/Scenes/Proto_5_Lvl_6.unity
     guid: 6763c56c705415443b6030269b0c7b6b
+  - enabled: 1
+    path: Assets/Prototype5/Scenes/Proto_5_Lvl_7.unity
+    guid: 60188d6ce96b0144f84450a985e522d2
+  - enabled: 1
+    path: Assets/Prototype5/Scenes/Proto_5_Lvl_8.unity
+    guid: a9eca40009452b04fb0b9862d8111ce6
+  - enabled: 1
+    path: Assets/Prototype5/Scenes/Proto_5_Lvl_9.unity
+    guid: 5cac1b1807c959248a64feb92b2c6118
+  - enabled: 1
+    path: Assets/Prototype5/Scenes/Proto_5_Lvl_10.unity
+    guid: 9abdb26260092134082756864aa9316a
   m_configObjects: {}
