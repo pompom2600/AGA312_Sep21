@@ -11,6 +11,8 @@ TagManager:
   - Deposit
   - Exit
   - Plate
+  - Ice
+  - Bounce
   layers:
   - Default
   - TransparentFX

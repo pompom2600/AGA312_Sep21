@@ -10,16 +10,14 @@ public class Prototype_Char_Contr : MonoBehaviour
     public GameObject winPanel;
     public GameObject TimerPanel;
     public TMP_Text timerText;
-    public float timer = 30;
+    //public float timer = 30;
     int count = 0;
 
 
     [Header("Player")]
     private Rigidbody playerRb;
-    private Vector3 spawnPoint;
 
     [Header("Indicators")]
-    //public GameObject pickupIndicator;
     public GameObject center;
 
     [Header("Other")]
@@ -36,24 +34,24 @@ public class Prototype_Char_Contr : MonoBehaviour
 
     void Start()
     {
-        spawnPoint = transform.position;
 
     }
 
     void Update()
     {
-        //pickupIndicator.transform.position = transform.position + new Vector3(0, 1f, 0);
-        if (timerBool == true)
+
+       
+        /* if (timerBool == true)
             {
                 print("bool on");
                 timer = timer - Time.deltaTime;
-                timerText.text = " " + timer.ToString("F0");
+                timerText.text = "Timer: " + timer.ToString("F0");
         }
         if (timer <= 0)
             {
-                TimerPanel.SetActive(false);
+                //TimerPanel.SetActive(false);
                 timerBool = false;
-            }
+            }*/
     }
 
 
@@ -118,10 +116,6 @@ public class Prototype_Char_Contr : MonoBehaviour
             Destroy(collision.collider.gameObject, 1f);
         }
 
-        if (collision.collider.CompareTag("Zone"))
-        {
-            transform.position = spawnPoint;
-        }
 
         if (collision.collider.CompareTag("Plate"))
         {

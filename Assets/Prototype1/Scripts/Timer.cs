@@ -35,7 +35,7 @@ public class Timer : MonoBehaviour
 
         yield return new WaitForSeconds(1);
 
-        secondsLeft -= 1;
+        secondsLeft --;
         if (secondsLeft == 0 && minutesLeft == 0)
         {
             losePanel.SetActive(true);
