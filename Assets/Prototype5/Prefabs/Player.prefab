@@ -126,18 +126,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   winPanel: {fileID: 0}
-  TimerPanel: {fileID: 0}
-  timerText: {fileID: 0}
   center: {fileID: 0}
   pickup:
   - {fileID: 0}
   - {fileID: 0}
   - {fileID: 0}
   - {fileID: 0}
-  pressurePlate: {fileID: 0}
-  lockedDoor: {fileID: 0}
-  pressureDoor: {fileID: 0}
   nextLevel: 0
-  timerBool: 0
   originalColor: {r: 0, g: 0, b: 0, a: 0}
   depositColor: {r: 0, g: 0, b: 0, a: 0}

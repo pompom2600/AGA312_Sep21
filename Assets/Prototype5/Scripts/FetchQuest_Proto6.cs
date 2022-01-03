@@ -4,12 +4,13 @@ using UnityEngine;
 
 public class FetchQuest_Proto6 : MonoBehaviour
 {
-    public GameObject pickup;
+    public GameObject[] pickup;
     public bool hasPickup;
     public GameObject center;
     public bool nextLevel;
     public GameObject pickupIndicator;
     public GameObject winPanel;
+    int count = 0;
 
 
     void Start()
@@ -23,6 +24,23 @@ public class FetchQuest_Proto6 : MonoBehaviour
         pickupIndicator.transform.position = transform.position + new Vector3(0, 1f, 0);
     }
 
+    private void OnCollisionEnter(Collision collision)
+    {
+        if (collision.collider.CompareTag("Deposit") && hasPickup)
+        {
+            pickupIndicator.SetActive(false);
+            hasPickup = false;
+
+            if (count == pickup.Length)
+            {
+                //pickupIndicator.SetActive(true);
+                center.GetComponent<Renderer>().material.color = Color.green;
+                nextLevel = true;
+            }
+
+        }
+    }
+
     private void OnTriggerEnter(Collider other)
     {
         if (other.CompareTag("Pickup"))
@@ -30,14 +48,10 @@ public class FetchQuest_Proto6 : MonoBehaviour
             hasPickup = true;
             pickupIndicator.SetActive(true);
             Destroy(other.gameObject);
+            count++;
         }
 
-        if (other.CompareTag("Deposit") && hasPickup)
-        {
-            center.GetComponent<Renderer>().material.color = Color.green;
-            nextLevel = true;
-            pickupIndicator.SetActive(false);
-        }
+        
 
         if (other.CompareTag("Exit") && nextLevel)
         {

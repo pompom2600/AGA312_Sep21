@@ -8,8 +8,6 @@ public class Prototype_Char_Contr : MonoBehaviour
 
     [Header("UI")]
     public GameObject winPanel;
-    public GameObject TimerPanel;
-    public TMP_Text timerText;
     //public float timer = 30;
     int count = 0;
 
@@ -22,11 +20,7 @@ public class Prototype_Char_Contr : MonoBehaviour
 
     [Header("Other")]
     public GameObject[] pickup;
-    public GameObject pressurePlate;
-    public GameObject lockedDoor;
-    public GameObject pressureDoor;
     public bool nextLevel;
-    public bool timerBool;
 
 
     public Color originalColor;
@@ -76,7 +70,6 @@ public class Prototype_Char_Contr : MonoBehaviour
                 //pickupIndicator.SetActive(true);
                 center.GetComponent<Renderer>().material.color = Color.green;
                 nextLevel = true;
-                Destroy(lockedDoor);
             }
         }
 
@@ -119,13 +112,6 @@ public class Prototype_Char_Contr : MonoBehaviour
         if (collision.collider.CompareTag("Exit"))
         {
             winPanel.SetActive(true);
-        }
-        if (collision.collider.CompareTag("Plate"))
-        {
-            pressurePlate.GetComponent<Renderer>().material.color = Color.black;
-            pressureDoor.SetActive(false);
-            TimerPanel.SetActive(true);
-            timerBool = true;
         }
     }
 

@@ -6,6 +6,7 @@ using TMPro;
 
 public class Timer : MonoBehaviour
 {
+    
     public TMP_Text textDisplay;
     public GameObject losePanel;
     public int secondsLeft = 60;
@@ -15,12 +16,13 @@ public class Timer : MonoBehaviour
     void Start()
     {
         textDisplay.text = "Timer: " + minutesLeft + ":" + secondsLeft;
+        countDown = false;
     }
 
 
     void Update()
     {
-        if (countDown == false && secondsLeft > 0)
+        if (countDown == false && secondsLeft >= 0)
         {
             StartCoroutine(Timertake());
         }
@@ -32,7 +34,7 @@ public class Timer : MonoBehaviour
     IEnumerator Timertake()
     {
         countDown = true;
-
+        Debug.Log("TimerTake active");
         yield return new WaitForSeconds(1);
 
         secondsLeft --;

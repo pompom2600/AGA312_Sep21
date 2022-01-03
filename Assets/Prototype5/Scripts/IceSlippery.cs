@@ -5,7 +5,7 @@ using UnityEngine;
 public class IceSlippery : MonoBehaviour
 {
     public int iceDrag = 0;
-    public int normalDrag = 2;
+    public int normalDrag = 5;
     public Rigidbody rb;
 
     void Start()
@@ -22,7 +22,7 @@ public class IceSlippery : MonoBehaviour
 
     private void OnCollisionStay(Collision collision)
     {
-        
+        Debug.Log("ICE");
         if (collision.collider.CompareTag("Ice"))
         {
             rb.drag = iceDrag;
@@ -31,7 +31,7 @@ public class IceSlippery : MonoBehaviour
     }
     private void OnCollisionExit(Collision collision)
     {
-        Debug.Log("Grounded");
+
         if (collision.collider.CompareTag("Ice"))
         {
             rb.drag = normalDrag;
